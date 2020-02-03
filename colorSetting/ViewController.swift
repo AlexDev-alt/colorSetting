@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    //MARK: - IB outlets
+//MARK: - IB Outlets
     @IBOutlet var colorView: UIView!
     
     @IBOutlet var redLabel: UILabel!
@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     @IBOutlet var greenTextField: UITextField!
     @IBOutlet var blueTextField: UITextField!
     
-    //MARK: - Life cycle
+//MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,7 +78,7 @@ class ViewController: UIViewController {
         
     }
     
-    //MARK: - IB actions
+//MARK: - IB Actions
     @IBAction func redSliderAction() {
         
         colorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(blueSlider.value), alpha: 1)
@@ -103,7 +103,7 @@ class ViewController: UIViewController {
         
     }
     
-    // MARK: - Public Methods
+// MARK: - Public Methods
     func createDoneButton () {
         
         let toolBar = UIToolbar()
@@ -127,7 +127,6 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
 }
-
 
 //MARK: - UITextFieldDelegate
 extension ViewController: UITextFieldDelegate {
@@ -198,7 +197,7 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: - UIAlertcontroller
+//MARK: - UIAlertcontroller
 extension ViewController {
     
     private func showAllert(with title: String, and message: String) {
