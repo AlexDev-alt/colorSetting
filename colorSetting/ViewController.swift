@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
+    //MARK: - IB outlets
+    
     @IBOutlet var collorView: UIView!
     
     @IBOutlet var swipeLabel: UILabel!
@@ -25,6 +27,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var greenTextField: UITextField!
     @IBOutlet var blueTextField: UITextField!
     
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,18 +37,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         redSlider.maximumValue = 1
         redSlider.tintColor = .red
         
-        greenSlider.value = 0.3
+        greenSlider.value = 0.5
         greenSlider.minimumValue = 0
         greenSlider.maximumValue = 1
         greenSlider.tintColor = .green
         
-        blueSlider.value = 0.3
+        blueSlider.value = 0.8
         blueSlider.minimumValue = 0
         blueSlider.maximumValue = 1
         blueSlider.tintColor = .blue
         
         //label
-        
         redLabel.text = String(redSlider.value)
         greenLabel.text = String(greenSlider.value)
         blueLabel.text = String(blueSlider.value)
@@ -63,13 +65,103 @@ class ViewController: UIViewController, UITextFieldDelegate {
         greenTextField.keyboardType = .decimalPad
         blueTextField.keyboardType = .decimalPad
         
+        // "done" button
         createDoneButton()
         
         //view
-        collorView.layer.cornerRadius = 10
- 
+        collorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(redSlider.value), alpha: 1)
+        
     }
- 
+        
+    //MARK: - IB actions
+    @IBAction func redSliderAction() {
+        
+        collorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(blueSlider.value), alpha: 1)
+        redLabel.text = String(format: "%.2f", redSlider.value)
+        redTextField.text = String(format: "%.2f", redSlider.value)
+        
+    }
+    
+    @IBAction func greenSliderAction() {
+        
+        collorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(blueSlider.value), alpha: 1)
+        greenLabel.text = String(format: "%.2f", greenSlider.value)
+        greenTextField.text = String(format: "%.2f", greenSlider.value)
+        
+    }
+    
+    @IBAction func blueSliderAction() {
+        
+        collorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(blueSlider.value), alpha: 1)
+        blueLabel.text = String(format: "%.2f", blueSlider.value)
+        blueTextField.text = String(format: "%.2f", blueSlider.value)
+        
+    }
+        
+    // MARK: - UI Delegate
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        
+        var countOfpoint = 0
+        
+        guard let text = textField.text else { return }
+        textField.text = text.replacingOccurrences(of: "00", with: "0")
+        
+        if text.first == ".", text.isEmpty  {
+            textField.text = "0."
+        }
+        
+        for char in text {
+            if char == "." {
+                countOfpoint += 1
+            }
+        }
+        
+        if countOfpoint > 1 {
+            textField.text = "0."
+        }
+        if text.count > 4 {
+            textField.text?.removeLast()
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        guard let text = textField.text,
+            Float(text) ?? 0.0 <= redSlider.maximumValue,
+            Float(text) ?? 0.0 >= redSlider.minimumValue
+            else {
+                
+                showAllert(with: "Wrong format", and: "use digit at 0.0 to 1.0")
+                return
+        }
+        
+        if textField == redTextField {
+            
+            guard let redColor = redTextField.text else { return }
+            collorView.backgroundColor = .red
+            redSlider.value = Float(redColor) ?? redSlider.value
+            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(redColor) ?? redSlider.value))
+            redLabel.text = redColor
+                        
+        } else if textField == blueTextField {
+            
+            guard let blueColor = blueTextField.text else { return }
+            collorView.backgroundColor = .blue
+            blueSlider.value = Float(blueColor) ?? blueSlider.value
+            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(blueColor) ?? blueSlider.value ))
+            blueLabel.text = blueColor
+            
+        } else if textField == greenTextField {
+            
+            guard let greenColor = greenTextField.text else { return }
+            collorView.backgroundColor = .green
+            greenSlider.value = Float(greenColor) ?? greenSlider.value
+            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(greenColor) ?? greenSlider.value))
+            greenLabel.text = greenColor
+            
+        }
+    }
+    
     //MARK: - Creater "done" button
     func createDoneButton () {
         
@@ -81,86 +173,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
                                             action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done,
                                          target: self,
-                                         action: #selector(self.doneClicked))
+                                         action: #selector(doneClicked))
         
         toolBar.setItems([flexBarButton,doneButton], animated: false)
-    
+        
         redTextField.inputAccessoryView = toolBar
         greenTextField.inputAccessoryView = toolBar
         blueTextField.inputAccessoryView = toolBar
     }
     
-    @IBAction func redSliderAction() {
-        
-        swipeLabel.isHidden = true
-        collorView.backgroundColor = .red
-        collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(redSlider.value))
-        redLabel.text = String(format: "%.2f", redSlider.value)
-        redTextField.text = String(format: "%.2f", redSlider.value)
-        
-    }
-    
-    @IBAction func greenSliderAction() {
-        
-        swipeLabel.isHidden = true
-        collorView.backgroundColor = .green
-        collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(greenSlider.value))
-        greenLabel.text = String(format: "%.2f", greenSlider.value)
-        greenTextField.text = String(format: "%.2f", greenSlider.value)
-        
-    }
-    
-    @IBAction func blueSliderAction() {
-        
-        swipeLabel.isHidden = true
-        collorView.backgroundColor = .blue
-        collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(blueSlider.value))
-        blueLabel.text = String(format: "%.2f", blueSlider.value)
-        blueTextField.text = String(format: "%.2f", blueSlider.value)
-        
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        guard let text = textField.text,
-            Float(text) ?? 0 <= redSlider.maximumValue,
-            Float(text) ?? 0 >= redSlider.minimumValue
-            else {
-                
-            showAllert(with: "Wrong format", and: "use digit at 0.0 to 1.0")
-            return
-        }
-
-        if textField == redTextField {
-            
-            guard let redColor = redTextField.text else { return }
-            collorView.backgroundColor = .red
-            redSlider.value = Float(redColor) ?? 0.0
-            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(redColor) ?? 0.0))
-            redLabel.text = String(format: "%.2f", redColor)
-            
-        } else if textField == blueTextField {
-            
-            guard let blueColor = blueTextField.text else { return }
-            collorView.backgroundColor = .blue
-            blueSlider.value = Float(blueColor) ?? 0.0
-            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(blueColor) ?? 0.0))
-            blueLabel.text = String(format: "%.2f", blueColor)
-            
-        } else if textField == greenTextField {
-            
-            guard let greenColor = greenTextField.text else { return }
-            collorView.backgroundColor = .green
-            greenSlider.value = Float(greenColor) ?? 0.0
-            collorView.backgroundColor = collorView.backgroundColor?.withAlphaComponent(CGFloat(Float(greenColor) ?? 0.0))
-            greenLabel.text = String(format: "%.2f",greenColor)
-            
-        }
-    }
-    
+    //MARK: - hide keyboard
     @objc func doneClicked() {
-           view.endEditing(true)
-       }
+        view.endEditing(true)
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -176,8 +201,9 @@ extension ViewController {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-        self.redTextField.text = String(self.redSlider.value)
-      
+            self.redTextField.text = String(format: "%.2f", self.redSlider.value)
+            self.greenTextField.text = String(format: "%.2f", self.greenSlider.value)
+            self.blueTextField.text = String(format: "%.2f", self.blueSlider.value)
         }
         
         alert.addAction(okAction)
