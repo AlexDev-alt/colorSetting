@@ -25,51 +25,15 @@ class ViewController: UIViewController {
     @IBOutlet var greenTextField: UITextField!
     @IBOutlet var blueTextField: UITextField!
     
-//MARK: - Life Cycle
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //slider
-        redSlider.value = 0.3
-        redSlider.minimumValue = 0
-        redSlider.maximumValue = 1
-        redSlider.tintColor = .red
-        
-        greenSlider.value = 0.5
-        greenSlider.minimumValue = 0
-        greenSlider.maximumValue = 1
-        greenSlider.tintColor = .green
-        
-        blueSlider.value = 0.8
-        blueSlider.minimumValue = 0
-        blueSlider.maximumValue = 1
-        blueSlider.tintColor = .blue
-        
-        //label
-        redLabel.text = String(redSlider.value)
-        greenLabel.text = String(greenSlider.value)
-        blueLabel.text = String(blueSlider.value)
-        
-        //field
-        redTextField.text = String(redSlider.value)
-        greenTextField.text = String(greenSlider.value)
-        blueTextField.text = String(blueSlider.value)
-        
-        redTextField.delegate = self
-        greenTextField.delegate = self
-        blueTextField.delegate = self
-        
-        redTextField.keyboardType = .decimalPad
-        greenTextField.keyboardType = .decimalPad
-        blueTextField.keyboardType = .decimalPad
-        
-        // "done" button
+        setupSlider()
+        setupLabel()
+        setupTextField()
+        setupView()
         createDoneButton()
-        
-        //view
-        colorView.layer.cornerRadius = 10
-        colorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(redSlider.value), alpha: 1)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -126,6 +90,60 @@ class ViewController: UIViewController {
     @objc func doneClicked() {
         view.endEditing(true)
     }
+
+
+//MARK: - Private Methods
+
+private func setupSlider() {
+    
+    redSlider.value = 0.3
+    redSlider.minimumValue = 0
+    redSlider.maximumValue = 1
+    redSlider.tintColor = .red
+    
+    greenSlider.value = 0.5
+    greenSlider.minimumValue = 0
+    greenSlider.maximumValue = 1
+    greenSlider.tintColor = .green
+    
+    blueSlider.value = 0.8
+    blueSlider.minimumValue = 0
+    blueSlider.maximumValue = 1
+    blueSlider.tintColor = .blue
+    
+    }
+    
+    private func setupLabel() {
+        
+        redLabel.text = String(redSlider.value)
+        greenLabel.text = String(greenSlider.value)
+        blueLabel.text = String(blueSlider.value)
+        
+    }
+    
+    private func setupTextField() {
+        
+        redTextField.text = String(redSlider.value)
+        greenTextField.text = String(greenSlider.value)
+        blueTextField.text = String(blueSlider.value)
+        
+        redTextField.delegate = self
+        greenTextField.delegate = self
+        blueTextField.delegate = self
+        
+        redTextField.keyboardType = .decimalPad
+        greenTextField.keyboardType = .decimalPad
+        blueTextField.keyboardType = .decimalPad
+        
+    }
+    
+    private func setupView() {
+        
+        colorView.layer.cornerRadius = 10
+        colorView.backgroundColor = UIColor(red: CGFloat(redSlider.value), green: CGFloat(greenSlider.value), blue: CGFloat(redSlider.value), alpha: 1)
+        
+    }
+    
 }
 
 //MARK: - UITextFieldDelegate
